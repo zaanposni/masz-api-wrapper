@@ -48,3 +48,7 @@ class MASZRequestAdapter:
     def get_version(self) -> Version:
         r = self.__request("GETSTATIC", "/static/version.json")
         return Version(**r.json())
+
+    def get_adminstats(self) -> Adminstats:
+        r = self.__request("GET", "/meta/adminstats")
+        return Adminstats(**r.json())

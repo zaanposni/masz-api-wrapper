@@ -17,14 +17,14 @@ class MASZClient(MASZRequestAdapter):
 
         try:
             with console.info_status(f"[bold green]Connecting to MASZ at {url} ...") as status:
-                service_health = self.get_current_health()
-                if service_health.status.lower() == 'ok':
-                    if service_health.response_time < 200:
-                        console.info(f":white_check_mark: Ping [bright_green]'{service_health.status.upper()}' {service_health.response_time}[/bright_green] ms.")
+                self.health = self.get_current_health()
+                if self.health.status.lower() == 'ok':
+                    if self.health.response_time < 200:
+                        console.info(f":white_check_mark: Ping [bright_green]'{self.health.status.upper()}' {self.health.response_time}[/bright_green] ms.")
                     else:
-                        console.info(f":white_check_mark: Ping [bright_green]'{service_health.status.upper()}'[/bright_green][bright_yellow] {service_health.response_time}[/bright_yellow] ms.")
+                        console.info(f":white_check_mark: Ping [bright_green]'{self.health.status.upper()}'[/bright_green][bright_yellow] {self.health.response_time}[/bright_yellow] ms.")
                 else:
-                    console.info(f":white_check_mark: Ping [bright_red]'{service_health.status.upper()}' {service_health.response_time}[/bright_red] ms.")
+                    console.info(f":white_check_mark: Ping [bright_red]'{self.health.status.upper()}' {self.health.response_time}[/bright_red] ms.")
 
         except MASZBaseException as e:
             console.critical(f":exclamation: [red]MASZ API at {url} seems to be unhealthy or unreachable.")
@@ -32,11 +32,11 @@ class MASZClient(MASZRequestAdapter):
 
         try:
             with console.info_status(f"[bold green]Checking API version...") as status:
-                self.health = self.get_version()
-                if self.health.masz_version.startswith('v1.'):
-                    console.info(f":white_check_mark: API version {self.health.masz_version} is [bright_green]compatible[/bright_green].")
+                self.version = self.get_version()
+                if self.version.masz_version.startswith('v1.'):
+                    console.info(f":white_check_mark: API version {self.version.masz_version} is [bright_green]compatible[/bright_green].")
                 else:
-                    console.critical(f":exclamation: API version {self.health.masz_version} [red]may not be compatible[/red]. Try to upgrade this python package.")
+                    console.critical(f":exclamation: API version {self.version.masz_version} [red]may not be compatible[/red]. Try to upgrade this python package.")
 
         except MASZBaseException as e:
             console.critical(f":exclamation: [red]Failed to fetch API version.")
