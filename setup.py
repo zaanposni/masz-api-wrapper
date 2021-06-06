@@ -6,7 +6,7 @@ with open("readme.md", "r", encoding="utf-8") as fh:
 setup(
   name='masz',
   py_modules=["masz"],
-  version='1.0',
+  version='1.0.4',
   license='MIT',
   description='API Wrapper for MASZ (A discord moderation bot)',
   author='zaanposni',
@@ -20,7 +20,8 @@ setup(
   install_requires=[
           'requests',
           'typing',
-          'python-dateutil'
+          'python-dateutil',
+          'rich'
       ],
   classifiers=[
     'Development Status :: 1 - Planning',

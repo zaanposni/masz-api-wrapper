@@ -22,10 +22,10 @@ class MASZConsole(Console):
 
     def info(self, string: str):
         if self.log_level <= 1:
-            self.log(f"[bright_black][[white]I[bright_black]][/bright_black] {string}")
+            self.log(f"[bright_black][[white]I[/white][bright_black]][/bright_black] {string}")
 
     def critical(self, string: str):
-            self.log(f"[bright_black][[bright_red]C[bright_black]][/bright_black] {string}")
+            self.log(f"[bright_black][[bright_red]C[/bright_red][bright_black]][/bright_black] {string}")
 
     def info_status(self, string: str):
         if self.log_level <= 1:

@@ -14,3 +14,19 @@ class MASZRequestHandler:
     def get(self, resource: str, params: dict = dict(), headers: dict = dict()) -> Response:
         final_headers = {**headers, **self.headers}
         return requests.get(f"{self.url}/api/v{self.api_version}/{resource.lstrip('/')}", headers=final_headers, params=params)
+
+    def get_static(self, resource: str, params: dict = dict(), headers: dict = dict()) -> Response:
+        final_headers = {**headers, **self.headers}
+        return requests.get(f"{self.url}/{resource.lstrip('/')}", headers=final_headers, params=params)
+    
+    def post(self, resource: str, body: dict, params: dict = dict(), headers: dict = dict()) -> Response:
+        final_headers = {**headers, **self.headers}
+        return requests.post(f"{self.url}/api/v{self.api_version}/{resource.lstrip('/')}", json=body, headers=final_headers, params=params)
+    
+    def put(self, resource: str, body: dict, params: dict = dict(), headers: dict = dict()) -> Response:
+        final_headers = {**headers, **self.headers}
+        return requests.put(f"{self.url}/api/v{self.api_version}/{resource.lstrip('/')}", json=body, headers=final_headers, params=params)
+
+    def delete(self, resource: str, params: dict = dict(), headers: dict = dict()) -> Response:
+        final_headers = {**headers, **self.headers}
+        return requests.delete(f"{self.url}/api/v{self.api_version}/{resource.lstrip('/')}", headers=final_headers, params=params)
