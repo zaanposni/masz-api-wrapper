@@ -5,3 +5,6 @@ from .version import Version
 from .adminstats import Adminstats
 from .guild import DiscordGuild
 from .role import DiscordRole
+from .guildconfig import GuildConfig
+from .channel import DiscordChannel
+from .member import DiscordMember

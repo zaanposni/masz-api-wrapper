@@ -1,5 +1,3 @@
-from masz.obj.member import DiscordMember
-from masz.obj.channel import DiscordChannel
 from typing import Union, List
 
 from .masz_request import MASZRequestHandler

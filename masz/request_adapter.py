@@ -1,10 +1,12 @@
 import time
-from requests import Response
+from typing import Union
 
+from .masz_guild import MASZGuildAPI
 from .masz_request import MASZRequestHandler
 from .discord_api import MASZDiscordAPI
 from .exceptions import *
 from .obj import *
+
 
 class MASZRequestAdapter:
     def __init__(self, url: str, token: str, api_version: int = 1, header: str = "Authorization", header_prefix: str = "Bearer ") -> None:
@@ -27,3 +29,6 @@ class MASZRequestAdapter:
     def get_adminstats(self) -> Adminstats:
         r = self.request_handler.request("GET", "/meta/adminstats")
         return Adminstats(**r.json())
+
+    def get_guild(self, guild_id: Union[str, int]) -> MASZGuildAPI:
+        return MASZGuildAPI(self.request_handler, guild_id)
