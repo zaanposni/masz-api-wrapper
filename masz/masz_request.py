@@ -15,16 +15,16 @@ class MASZRequestHandler:
         self.header_prefix = header_prefix
         self.headers = {self.header: f"{self.header_prefix}{self.token}"}
 
-    def request(self, method: str, resource: str, params: dict = dict(), headers: dict = dict(), handle_status_code: bool = True) -> Response:
+    def request(self, method: str, resource: str, params: dict = dict(), headers: dict = dict(), handle_status_code: bool = True, json_body: dict = dict()) -> Response:
         try:
             if method == "GET":
                 r = self.__get(resource, params, headers)
             if method == "GETSTATIC":
                 r = self.__get_static(resource, params, headers)
             if method == "PUT":
-                r = self.__put(resource, params, headers)
+                r = self.__put(resource, json_body, params, headers)
             if method == "POST":
-                r = self.__post(resource, params, headers)
+                r = self.__post(resource, json_body, params, headers)
             if method == "DELETE":
                 r = self.__delete(resource, params, headers)
             if r.status_code not in [200, 201]:
@@ -35,7 +35,7 @@ class MASZRequestHandler:
             raise MASZRequestFailure("Request failed", e)
         if r.status_code == 401 and handle_status_code:
             raise MASZLoginFailure("Unauthorized", r.text)
-        if r.status_code != 200 and handle_status_code:
+        if r.status_code not in [200, 201] and handle_status_code:
             raise MASZRequestFailure(f"Response code indicates {r.status_code}", r.text)
         return r
 

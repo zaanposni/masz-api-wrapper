@@ -18,7 +18,7 @@ class MASZRequestAdapter:
 
     def get_current_health(self) -> Status:
         start = time.perf_counter()
-        r = self.request_handler.request("GET", "/health", dict(), {'Accept': 'application/json'})
+        r = self.request_handler.request("GET", "/health", headers={'Accept': 'application/json'})
         request_time = time.perf_counter() - start
         return Status(round(request_time*1000, 2) , **r.json())
 
@@ -29,6 +29,9 @@ class MASZRequestAdapter:
     def get_adminstats(self) -> Adminstats:
         r = self.request_handler.request("GET", "/meta/adminstats")
         return Adminstats(**r.json())
+
+    def guild(self, guild_id: Union[str, int]) -> MASZGuildAPI:
+        return self.get_guild(guild_id=guild_id)
 
     def get_guild(self, guild_id: Union[str, int]) -> MASZGuildAPI:
         return MASZGuildAPI(self.request_handler, guild_id)
