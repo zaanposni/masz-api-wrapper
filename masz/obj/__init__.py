@@ -8,3 +8,7 @@ from .role import DiscordRole
 from .guildconfig import GuildConfig
 from .channel import DiscordChannel
 from .member import DiscordMember
+from .modcase import Modcase
+from .punishment_type import PunishmentType
+from .creation_type import CreationType
+from .comment import Comment

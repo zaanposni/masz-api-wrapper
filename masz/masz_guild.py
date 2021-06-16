@@ -2,6 +2,7 @@ from typing import Union
 
 from .console import console
 from .masz_request import MASZRequestHandler
+from .masz_modcase import MASZModcaseAPI
 from .exceptions import *
 from .obj import *
 
@@ -38,3 +39,6 @@ class MASZGuildAPI(GuildConfig):
             console.verbose(f"Failed to update guild {e}")
             return False
         return r.status_code == 200
+
+    def get_modcase(self, case_id: Union[str, int]) -> MASZModcaseAPI:
+        return MASZModcaseAPI(self.request_handler, self.guild_id, case_id)
