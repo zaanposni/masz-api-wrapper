@@ -42,3 +42,12 @@ class MASZGuildAPI(GuildConfig):
 
     def get_modcase(self, case_id: Union[str, int]) -> MASZModcaseAPI:
         return MASZModcaseAPI(self.request_handler, self.guild_id, case_id)
+
+    def create_modcase(self, modCase: Modcase, send_notification: bool = True, handle_punishment: bool = True) -> MASZModcaseAPI:
+        r = self.request_handler.request(
+                "POST",
+                f"/modcases/{self.guild_id}",
+                json_body=modCase,
+                params={"sendNotification": send_notification, "handlePunishment": handle_punishment}
+            )
+        return self.get_modcase(r.json()["caseid"])

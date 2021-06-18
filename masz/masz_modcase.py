@@ -41,3 +41,32 @@ class MASZModcaseAPI(Modcase):
             super().__init__(**refresh.json())
 
         return r.status_code == 201
+
+    def delete_comment(self, comment: Union[Comment, str, int]) -> bool:
+        comment_id = comment
+        if isinstance(comment, Comment):
+            comment_id = comment.id
+        try:
+            r = self.request_handler.request("DELETE", f"/modcases/{self.guild_id}/{self.case_id}/comments/{comment_id}", handle_status_code=False)
+        except MASZBaseException as e:
+            console.verbose(f"Failed to delete comment {e}")
+            return False
+        if r.status_code == 200:
+            self.comments = [x for x in self.comments if str(x.id)!=str(comment_id)]
+        return r.status_code == 200
+
+    def lock_comments(self) -> bool:
+        r = self.request_handler.request("POST", f"/modcases/{self.guild_id}/{self.case_id}/lock", handle_status_code=False)
+        return r.status_code == 200
+
+    def unlock_comments(self) -> bool:
+        r = self.request_handler.request("DELETE", f"/modcases/{self.guild_id}/{self.case_id}/lock", handle_status_code=False)
+        return r.status_code == 200
+    
+    def restore(self) -> bool:
+        r = self.request_handler.request("DELETE", f"/guilds/{self.guild_id}/bin/{self.case_id}/restore", handle_status_code=False)
+        return r.status_code == 200
+
+    def delete_from_bin(self) -> bool:
+        r = self.request_handler.request("DELETE", f"/guilds/{self.guild_id}/bin/{self.case_id}/delete", handle_status_code=False)
+        return r.status_code == 200
