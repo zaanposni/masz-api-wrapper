@@ -1,5 +1,5 @@
 setuptools==39.0.1
 requests==2.20.0
 typing==3.7.4.1
-python-dateutil
+dateparser
 rich==10.2.2

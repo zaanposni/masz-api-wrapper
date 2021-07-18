@@ -12,3 +12,4 @@ from .modcase import Modcase
 from .punishment_type import PunishmentType
 from .creation_type import CreationType
 from .comment import Comment
+from .motd import Motd

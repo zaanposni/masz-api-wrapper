@@ -20,7 +20,7 @@ setup(
   install_requires=[
           'requests',
           'typing',
-          'python-dateutil',
+          'dateparser',
           'rich'
       ],
   classifiers=[

@@ -1,7 +1,7 @@
 from typing import List
 from datetime import datetime
 
-from dateutil.parser import parser as dateparser
+import dateparser
 
 from .punishment_type import PunishmentType
 from .creation_type import CreationType
@@ -21,9 +21,9 @@ class Modcase:
         self.discriminator = kwargs.get("discriminator")
         self.nickname = kwargs.get("nickname")
         self.mod_id = kwargs.get("modId")
-        self.created_at = kwargs.get("createdAt")
-        self.occured_at = kwargs.get("occuredAt")
-        self.last_edited_at = kwargs.get("lastEditedAt")
+        self.created_at = dateparser.parse(kwargs.get("createdAt"))
+        self.occured_at = dateparser.parse(kwargs.get("occuredAt"))
+        self.last_edited_at = dateparser.parse(kwargs.get("lastEditedAt"))
         self.last_edited_by_mod_id = kwargs.get("lastEditedByModId")
         self.punishment = kwargs.get("punishment")
         self.labels = kwargs.get("labels", [])
@@ -35,8 +35,8 @@ class Modcase:
         self.punishment_active = kwargs.get("punishmentActive", False)
         self.allow_comments = kwargs.get("allowComments", False)
         self.locked_by_user_id = kwargs.get("lockedByUserId")
-        self.locked_at = kwargs.get("lockedAt")
-        self.marked_to_delete_at = kwargs.get("markedToDeleteAt")
+        self.locked_at = dateparser.parse(kwargs.get("lockedAt"))
+        self.marked_to_delete_at = dateparser.parse(kwargs.get("markedToDeleteAt"))
         self.deleted_by_user_id = kwargs.get("deletedByUserId")
         self.comments = [Comment(**x) for x in kwargs.get("comments", [])]
 
