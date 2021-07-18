@@ -3,16 +3,19 @@ from typing import Union
 from .console import console
 from .masz_request import MASZRequestHandler
 from .masz_modcase import MASZModcaseAPI
+from .masz_motd import MASZMotdAPI
 from .exceptions import *
 from .obj import *
 
 
 class MASZGuildAPI(GuildConfig):
+    motd: MASZMotdAPI = None
     def __init__(self, request_handler: MASZRequestHandler, guild_id: Union[str, int]) -> None:
         self.request_handler = request_handler
         self.guild_id = guild_id
         r = self.request_handler.request("GET", f"/guilds/{guild_id}")
         super().__init__(**r.json())
+        self.motd = MASZMotdAPI(request_handler, guild_id)
 
     def delete(self, delete_data: bool = False) -> bool:
         try:
@@ -23,16 +26,18 @@ class MASZGuildAPI(GuildConfig):
         return r.status_code == 200
 
     def update(self, **fields) -> bool:
+        for k, v in fields.items():
+            setattr(self, k, v)
         try:
             data = {
-                "modRoles": fields.get("mod_roles", self.mod_roles),
-                "adminRoles": fields.get("admin_roles", self.admin_roles),
-                "mutedRoles": fields.get("muted_roles", self.muted_roles),
-                "modNotificationDM": fields.get("dm_notification", self.dm_notification),
-                "modPublicNotificationWebhook": fields.get("public_webhook", self.public_webhook),
-                "modInternalNotificationWebhook": fields.get("internal_webhook", self.internal_webhook),
-                "strictModPermissionCheck": fields.get("strict_permission_check", self.strict_permission_check),
-                "executeWhoisOnJoin": fields.get("execute_whois_on_join", self.execute_whois_on_join)
+                "modRoles": self.mod_roles,
+                "adminRoles": self.admin_roles,
+                "mutedRoles": self.muted_roles,
+                "modNotificationDM": self.dm_notification,
+                "modPublicNotificationWebhook": self.public_webhook,
+                "modInternalNotificationWebhook": self.internal_webhook,
+                "strictModPermissionCheck": self.strict_permission_check,
+                "executeWhoisOnJoin": self.execute_whois_on_join
             }
             r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}", json_body=data, handle_status_code=False)
         except MASZBaseException as e:

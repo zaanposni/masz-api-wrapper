@@ -24,7 +24,8 @@ class MASZModcaseAPI(Modcase):
         return r.status_code == 200
 
     def update(self, **fields) -> bool:
-        pass
+        for k, v in fields.items():
+            setattr(self, k, v)
 
     def post_comment(self, msg: str) -> bool:
         data = {
