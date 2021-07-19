@@ -1,4 +1,4 @@
-import dateparser
+from masz.helpers import parse_dt_from_json
 
 class Adminstats:
     def __init__(self, **kwargs) -> None:
@@ -10,5 +10,5 @@ class Adminstats:
         self.usernotes = kwargs.get("userNotes", 0)
         self.usermappings = kwargs.get("userMappings", 0)
         self.apiTokens = kwargs.get("apiTokens", 0)
-        self.next_cache = dateparser.parse(kwargs.get("nextCache", 0))
+        self.next_cache = parse_dt_from_json(kwargs.get("nextCache", 0))
         self.cached_data = kwargs.get("cachedDataFromDiscord", [])

@@ -1,6 +1,7 @@
 from masz.obj.modcase import Modcase
 from typing import Union
 
+from masz.helpers import parse_dt_to_json
 from .console import console
 from .masz_request import MASZRequestHandler
 from .exceptions import *
@@ -8,12 +9,9 @@ from .obj import *
 
 
 class MASZModcaseAPI(Modcase):
-    def __init__(self, request_handler: MASZRequestHandler, guild_id: Union[str, int], case_id: Union[str, int]) -> None:
+    def __init__(self, request_handler: MASZRequestHandler, data: dict) -> None:
         self.request_handler = request_handler
-        self.guild_id = guild_id
-        self.case_id = case_id
-        r = self.request_handler.request("GET", f"/modcases/{guild_id}/{case_id}")
-        super().__init__(**r.json())
+        super().__init__(**data)
 
     def delete(self, send_notification: bool = True, force_delete: bool = False) -> bool:
         try:
@@ -23,9 +21,28 @@ class MASZModcaseAPI(Modcase):
             return False
         return r.status_code == 200
 
-    def update(self, **fields) -> bool:
+    def update(self, handle_punishment: bool = True, send_notification: bool = True, announce_dm: bool = True, **fields) -> bool:
         for k, v in fields.items():
             setattr(self, k, v)
+        try:
+            data = {
+                "title": self.title,
+                "description": self.description,
+                "userid": self.user_id,
+                "labels": self.labels,
+                "punishment": self.punishment,
+                "punishmentType": self.punishment_type,
+                "punishedUntil": parse_dt_to_json(self.punished_until),
+            }
+            r = self.request_handler.request("PUT", f"/modcases/{self.guild_id}/{self.case_id}",
+                                                params={'sendNotification': send_notification, 'handlePunishment': handle_punishment, 'announceDm': announce_dm},
+                                                json_body=data, handle_status_code=False)
+        except MASZBaseException as e:
+            console.verbose(f"Failed to update modcase {e}")
+            return False
+        if r.status_code == 200:
+            super().__init__(**r.json())
+        return r.status_code == 200
 
     def post_comment(self, msg: str) -> bool:
         data = {

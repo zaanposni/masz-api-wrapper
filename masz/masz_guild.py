@@ -3,6 +3,7 @@ from typing import Union
 from .console import console
 from .masz_request import MASZRequestHandler
 from .masz_modcase import MASZModcaseAPI
+from .masz_usernote import MASZUserNoteAPI
 from .masz_motd import MASZMotdAPI
 from .exceptions import *
 from .obj import *
@@ -43,10 +44,20 @@ class MASZGuildAPI(GuildConfig):
         except MASZBaseException as e:
             console.verbose(f"Failed to update guild {e}")
             return False
+        if r.status_code == 200:
+            super().__init__(**r.json())
         return r.status_code == 200
 
+    # Modcases
+    # =================================================================================================================
+
     def get_modcase(self, case_id: Union[str, int]) -> MASZModcaseAPI:
-        return MASZModcaseAPI(self.request_handler, self.guild_id, case_id)
+        r = self.request_handler.request("GET", f"/modcases/{self.guild_id}/{case_id}")
+        return MASZModcaseAPI(self.request_handler, r.json())
+    
+    def get_modcases(self, start_page=0) -> MASZModcaseAPI:
+        r = self.request_handler.request("GET", f"/modcases/{self.guild_id}", {'startPage': start_page})
+        return [MASZModcaseAPI(self.request_handler, x) for x in r.json()]
 
     def create_modcase(self, modCase: Modcase, send_notification: bool = True, handle_punishment: bool = True) -> MASZModcaseAPI:
         r = self.request_handler.request(
@@ -56,3 +67,12 @@ class MASZGuildAPI(GuildConfig):
                 params={"sendNotification": send_notification, "handlePunishment": handle_punishment}
             )
         return self.get_modcase(r.json()["caseid"])
+
+    # UserNotes
+    # =================================================================================================================
+
+    def get_usernote(self, user_id: Union[str, int]) -> MASZUserNoteAPI:
+        r = self.request_handler.request("GET", f"/guilds/{self.guild_id}/usernote/{user_id}")
+        return MASZUserNoteAPI(self.request_handler, r.json())
+
+

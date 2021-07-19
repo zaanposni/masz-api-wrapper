@@ -1,5 +1,14 @@
 from rich.console import Console
 
+# ====================================================================================
+#
+# If you want to use the console object to print stuff in your script
+# either use the corresponding log level method (verbose, info, critical)
+# or use .log() as it will always output regardless of the configured loglevel.
+#
+# ====================================================================================
+
+
 class MASZLogLevel:
     VERBOSE = 0
     INFO = 1
@@ -25,7 +34,7 @@ class MASZConsole(Console):
             self.log(f"[bright_black][[white]I[/white]][/bright_black] {string}")
 
     def critical(self, string: str):
-            self.log(f"[bright_black][[bright_red]C[/bright_red]][/bright_black] {string}")
+        self.log(f"[bright_black][[bright_red]C[/bright_red]][/bright_black] {string}")
 
     def info_status(self, string: str):
         if self.log_level <= 1:

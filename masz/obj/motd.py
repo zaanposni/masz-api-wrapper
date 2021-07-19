@@ -1,8 +1,7 @@
 from typing import List
 from datetime import datetime
 
-import dateparser
-
+from masz.helpers import parse_dt_from_json
 from .discord_user import DiscordUser
 from ..exceptions import MASZInvalidResponse
 
@@ -26,7 +25,7 @@ class Motd:
         self.id = motd.get("id")
         self.guild_id = motd.get("guildId")
         self.user_id = motd.get("userId")
-        self.created_at = dateparser.parse(motd.get("createdAt"))
+        self.created_at = parse_dt_from_json(motd.get("createdAt"))
         self.message = motd.get("message")
         self.show_motd = motd.get("showMotd", False)
 
