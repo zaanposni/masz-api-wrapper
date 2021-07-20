@@ -55,8 +55,8 @@ class MASZGuildAPI(GuildConfig):
         r = self.request_handler.request("GET", f"/modcases/{self.guild_id}/{case_id}")
         return MASZModcaseAPI(self.request_handler, r.json())
     
-    def get_modcases(self, start_page=0) -> MASZModcaseAPI:
-        r = self.request_handler.request("GET", f"/modcases/{self.guild_id}", {'startPage': start_page})
+    def get_modcases_paginated(self, start_page=0) -> MASZModcaseAPI:
+        r = self.request_handler.request("GET", f"/modcases/{self.guild_id}", params={'startPage': start_page})
         return [MASZModcaseAPI(self.request_handler, x) for x in r.json()]
 
     def create_modcase(self, modcase: Modcase, send_notification: bool = True, handle_punishment: bool = True) -> MASZModcaseAPI:
@@ -79,6 +79,10 @@ class MASZGuildAPI(GuildConfig):
     def get_usernote(self, user_id: Union[str, int]) -> MASZUserNoteAPI:
         r = self.request_handler.request("GET", f"/guilds/{self.guild_id}/usernote/{user_id}")
         return MASZUserNoteAPI(self.request_handler, r.json())
+
+    def get_usernotes(self) -> MASZUserNoteAPI:
+        r = self.request_handler.request("GET", f"/guilds/{self.guild_id}/usernote")
+        return [MASZUserNoteAPI(self.request_handler, x) for x in r.json()]
 
     def create_usernote(self, usernote: UserNote) -> MASZUserNoteAPI:
         r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}", json_body=usernote)
