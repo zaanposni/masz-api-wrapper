@@ -15,7 +15,7 @@ class MASZUserNoteAPI(UserNote):
 
     def delete(self) -> bool:
         try:
-            r = self.request_handler.request("DELETE", f"/guilds/{self.guild_id}/usernote/{self.id}", handle_status_code=False)
+            r = self.request_handler.request("DELETE", f"/guilds/{self.guild_id}/usernote/{self.id}")
         except MASZBaseException as e:
             console.verbose(f"Failed to delete usernote {e}")
             return False
@@ -30,7 +30,7 @@ class MASZUserNoteAPI(UserNote):
                 "userid": self.user_id
             }
             r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}/usernote",
-                                                json_body=data, handle_status_code=False)
+                                                json_body=data)
         except MASZBaseException as e:
             console.verbose(f"Failed to update usernote {e}")
             return False

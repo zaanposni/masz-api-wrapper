@@ -20,7 +20,7 @@ class MASZGuildAPI(GuildConfig):
 
     def delete(self, delete_data: bool = False) -> bool:
         try:
-            r = self.request_handler.request("DELETE", f"/guilds/{self.guild_id}", {'deleteData': delete_data}, handle_status_code=False)
+            r = self.request_handler.request("DELETE", f"/guilds/{self.guild_id}", {'deleteData': delete_data})
         except MASZBaseException as e:
             console.verbose(f"Failed to delete guild {e}")
             return False
@@ -40,7 +40,7 @@ class MASZGuildAPI(GuildConfig):
                 "strictModPermissionCheck": self.strict_permission_check,
                 "executeWhoisOnJoin": self.execute_whois_on_join
             }
-            r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}", json_body=data, handle_status_code=False)
+            r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}", json_body=data)
         except MASZBaseException as e:
             console.verbose(f"Failed to update guild {e}")
             return False
@@ -59,14 +59,19 @@ class MASZGuildAPI(GuildConfig):
         r = self.request_handler.request("GET", f"/modcases/{self.guild_id}", {'startPage': start_page})
         return [MASZModcaseAPI(self.request_handler, x) for x in r.json()]
 
-    def create_modcase(self, modCase: Modcase, send_notification: bool = True, handle_punishment: bool = True) -> MASZModcaseAPI:
+    def create_modcase(self, modcase: Modcase, send_notification: bool = True, handle_punishment: bool = True) -> MASZModcaseAPI:
         r = self.request_handler.request(
                 "POST",
                 f"/modcases/{self.guild_id}",
-                json_body=modCase,
+                json_body=modcase,
                 params={"sendNotification": send_notification, "handlePunishment": handle_punishment}
             )
-        return self.get_modcase(r.json()["caseid"])
+        return MASZModcaseAPI(self.request_handler, r.json())
+
+    def delete_modcase(self, case_id: Union[str, int], send_notification: bool = True, force_delete: bool = False) -> bool:
+        r = self.request_handler.request("DELETE", f"/modcases/{self.guild_id}/{case_id}",
+                                            params={'sendNotification': send_notification, 'forceDelete': force_delete})
+        return r.status_code == 200
 
     # UserNotes
     # =================================================================================================================
@@ -75,4 +80,11 @@ class MASZGuildAPI(GuildConfig):
         r = self.request_handler.request("GET", f"/guilds/{self.guild_id}/usernote/{user_id}")
         return MASZUserNoteAPI(self.request_handler, r.json())
 
+    def create_usernote(self, usernote: UserNote) -> MASZUserNoteAPI:
+        r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}", json_body=usernote)
+        return MASZUserNoteAPI(self.request_handler, r.json())
 
+    def delete_usernote(self, user_id: Union[str, int]) -> bool:
+        r = self.request_handler.request("DELETE", f"/guilds/{self.guild_id}/usernote/{user_id}")
+        return r.status_code == 200
+    

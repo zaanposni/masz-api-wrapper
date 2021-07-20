@@ -15,7 +15,7 @@ class MASZModcaseAPI(Modcase):
 
     def delete(self, send_notification: bool = True, force_delete: bool = False) -> bool:
         try:
-            r = self.request_handler.request("DELETE", f"/modcases/{self.guild_id}/{self.case_id}", {'sendNotification': send_notification, 'forceDelete': force_delete}, handle_status_code=False)
+            r = self.request_handler.request("DELETE", f"/modcases/{self.guild_id}/{self.case_id}", {'sendNotification': send_notification, 'forceDelete': force_delete})
         except MASZBaseException as e:
             console.verbose(f"Failed to delete modcase {e}")
             return False
@@ -36,7 +36,7 @@ class MASZModcaseAPI(Modcase):
             }
             r = self.request_handler.request("PUT", f"/modcases/{self.guild_id}/{self.case_id}",
                                                 params={'sendNotification': send_notification, 'handlePunishment': handle_punishment, 'announceDm': announce_dm},
-                                                json_body=data, handle_status_code=False)
+                                                json_body=data)
         except MASZBaseException as e:
             console.verbose(f"Failed to update modcase {e}")
             return False
@@ -49,7 +49,7 @@ class MASZModcaseAPI(Modcase):
             "message": msg
         }
         try:
-            r = self.request_handler.request("POST", f"/modcases/{self.guild_id}/{self.case_id}/comments", handle_status_code=False, json_body=data)
+            r = self.request_handler.request("POST", f"/modcases/{self.guild_id}/{self.case_id}/comments", json_body=data)
         except MASZBaseException as e:
             console.verbose(f"Failed to post comment {e}")
             return False
@@ -65,7 +65,7 @@ class MASZModcaseAPI(Modcase):
         if isinstance(comment, Comment):
             comment_id = comment.id
         try:
-            r = self.request_handler.request("DELETE", f"/modcases/{self.guild_id}/{self.case_id}/comments/{comment_id}", handle_status_code=False)
+            r = self.request_handler.request("DELETE", f"/modcases/{self.guild_id}/{self.case_id}/comments/{comment_id}")
         except MASZBaseException as e:
             console.verbose(f"Failed to delete comment {e}")
             return False
@@ -74,17 +74,17 @@ class MASZModcaseAPI(Modcase):
         return r.status_code == 200
 
     def lock_comments(self) -> bool:
-        r = self.request_handler.request("POST", f"/modcases/{self.guild_id}/{self.case_id}/lock", handle_status_code=False)
+        r = self.request_handler.request("POST", f"/modcases/{self.guild_id}/{self.case_id}/lock")
         return r.status_code == 200
 
     def unlock_comments(self) -> bool:
-        r = self.request_handler.request("DELETE", f"/modcases/{self.guild_id}/{self.case_id}/lock", handle_status_code=False)
+        r = self.request_handler.request("DELETE", f"/modcases/{self.guild_id}/{self.case_id}/lock")
         return r.status_code == 200
     
     def restore(self) -> bool:
-        r = self.request_handler.request("DELETE", f"/guilds/{self.guild_id}/bin/{self.case_id}/restore", handle_status_code=False)
+        r = self.request_handler.request("DELETE", f"/guilds/{self.guild_id}/bin/{self.case_id}/restore")
         return r.status_code == 200
 
     def delete_from_bin(self) -> bool:
-        r = self.request_handler.request("DELETE", f"/guilds/{self.guild_id}/bin/{self.case_id}/delete", handle_status_code=False)
+        r = self.request_handler.request("DELETE", f"/guilds/{self.guild_id}/bin/{self.case_id}/delete")
         return r.status_code == 200
