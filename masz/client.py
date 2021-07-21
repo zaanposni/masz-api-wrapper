@@ -6,6 +6,7 @@ from .exceptions import MASZBaseException, MASZLoginFailure
 from .obj import DiscordUser
 
 
+SUPPORTED_API_VERSION = 1
 
 class MASZClient(MASZRequestAdapter):
     def __init__(self, url: str, token: str, api_version: int = 1, log_level: MASZLogLevel = MASZLogLevel.INFO) -> None:
@@ -33,10 +34,13 @@ class MASZClient(MASZRequestAdapter):
         try:
             with console.info_status(f"[bold green]Checking API version...") as status:
                 self.server_version = self.get_version()
-                if self.server_version.masz_version.startswith('v1.'):
-                    console.info(f":white_check_mark: API version {self.server_version.masz_version} is [bright_green]compatible[/bright_green].")
+                if self.server_version.wrapper_version is None:
+                    console.critical(f":exclamation: This API [red]may not be compatible[/red]. You need to use MASZ v1.12.1 or newer!")
                 else:
-                    console.critical(f":exclamation: API version {self.server_version.masz_version} [red]may not be compatible[/red]. Try to upgrade this python package.")
+                    if SUPPORTED_API_VERSION >= self.server_version.wrapper_version:
+                        console.info(f":white_check_mark: API version {self.server_version.wrapper_version} is [bright_green]compatible[/bright_green].")
+                    else:
+                        console.critical(f":exclamation: API version {self.server_version.wrapper_version} [red]may not be compatible[/red]. This package only supports versions until {SUPPORTED_API_VERSION}. Try to upgrade this python package.")
 
         except MASZBaseException as e:
             console.critical(f":exclamation: [red]Failed to fetch API version.")
@@ -51,4 +55,4 @@ class MASZClient(MASZRequestAdapter):
             exit(1)
 
     def __str__(self) -> str:
-        return f"MASZ at {self._url} with api version {self.server_version.masz_version}"
+        return f"MASZ at {self._url} | {self.server_health}\n{self.server_version}"
