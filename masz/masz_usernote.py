@@ -1,7 +1,3 @@
-from masz.obj.modcase import Modcase
-from typing import Union
-
-from masz.helpers import parse_dt_to_json
 from .console import console
 from .masz_request import MASZRequestHandler
 from .exceptions import *
@@ -21,7 +17,7 @@ class MASZUserNoteAPI(UserNote):
             return False
         return r.status_code == 200
 
-    def update(self, handle_punishment: bool = True, send_notification: bool = True, announce_dm: bool = True, **fields) -> bool:
+    def update(self, **fields) -> bool:
         for k, v in fields.items():
             setattr(self, k, v)
         try:
