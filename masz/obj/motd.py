@@ -1,7 +1,7 @@
 from typing import List
 from datetime import datetime
 
-from masz.helpers import parse_dt_from_json
+from masz.helpers import parse_dt_from_json, parse_dt_to_json
 from .discord_user import DiscordUser
 from ..exceptions import MASZInvalidResponse
 
@@ -31,3 +31,13 @@ class Motd:
 
     def __str__(self) -> str:
         return f"{self.creator.username}#{self.creator.discriminator}: {self.message}" if self.show_motd else "Motd disabled"
+    
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "guildId": self.guild_id,
+            "userId": self.user_id,
+            "createdAt": parse_dt_to_json(self.created_at),
+            "message": self.message,
+            "showMotd": self.show_motd
+        }

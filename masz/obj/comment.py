@@ -1,4 +1,4 @@
-from masz.helpers import parse_dt_from_json
+from masz.helpers import parse_dt_from_json, parse_dt_to_json
 
 class Comment:
     def __init__(self, **kwargs) -> None:
@@ -9,3 +9,11 @@ class Comment:
 
     def __str__(self) -> str:
         return self.message
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "message": self.message,
+            "userId": self.user_id,
+            "createdAt": parse_dt_to_json(self.created_at)
+        }

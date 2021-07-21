@@ -49,3 +49,6 @@ class MASZClient(MASZRequestAdapter):
         except MASZBaseException as e:
             console.critical(f":exclamation: [red]Failed to login.")
             exit(1)
+
+    def __str__(self) -> str:
+        return f"MASZ at {self._url} with api version {self.server_version.masz_version}"

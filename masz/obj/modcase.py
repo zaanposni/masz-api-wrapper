@@ -1,7 +1,7 @@
 from typing import List
 from datetime import datetime
 
-from masz.helpers import parse_dt_from_json
+from masz.helpers import parse_dt_from_json, parse_dt_to_json
 from .punishment_type import PunishmentType
 from .creation_type import CreationType
 from .comment import Comment
@@ -44,3 +44,35 @@ class Modcase:
 
     def __str__(self) -> str:
         return f"#{self.case_id} {self.title}"
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "caseId": self.case_id,
+            "guildId": self.guild_id,
+            "title": self.title,
+            "description": self.description,
+            "userId": self.user_id,
+            "username": self.username,
+            "discriminator": self.discriminator,
+            "nickname": self.nickname,
+            "modId": self.mod_id,
+            "createdAt": parse_dt_to_json(self.created_at),
+            "occuredAt": parse_dt_to_json(self.occured_at),
+            "lastEditedAt": parse_dt_to_json(self.last_edited_at),
+            "lastEditedByModId": self.last_edited_by_mod_id,
+            "punishment": self.punishment,
+            "labels": self.labels,
+            "others": self.others,
+            "valid": self.valid,
+            "creationType": self.creation_type,
+            "punishmentType": self.punishment_type,
+            "punishedUntil": parse_dt_to_json(self.punished_until),
+            "punishmentActive": self.punishment_active,
+            "allowComments": self.allow_comments,
+            "lockedByUserId": self.locked_by_user_id,
+            "lockedAt": parse_dt_to_json(self.locked_at),
+            "markedToDeleteAt": parse_dt_to_json(self.marked_to_delete_at),
+            "deletedByUserId": self.deleted_by_user_id,
+            "comments": [x.to_dict() for x in self.comments]
+        }

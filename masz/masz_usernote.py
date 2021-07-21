@@ -21,12 +21,8 @@ class MASZUserNoteAPI(UserNote):
         for k, v in fields.items():
             setattr(self, k, v)
         try:
-            data = {
-                "description": self.description,
-                "userid": self.user_id
-            }
             r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}/usernote",
-                                                json_body=data)
+                                                json_body=self.to_dict())
         except MASZBaseException as e:
             console.verbose(f"Failed to update usernote {e}")
             return False

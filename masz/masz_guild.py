@@ -64,7 +64,7 @@ class MASZGuildAPI(GuildConfig):
         r = self.request_handler.request(
                 "POST",
                 f"/modcases/{self.guild_id}",
-                json_body=modcase,
+                json_body=modcase.to_dict(),
                 params={"sendNotification": send_notification, "handlePunishment": handle_punishment}
             )
         return MASZModcaseAPI(self.request_handler, r.json())
@@ -86,7 +86,7 @@ class MASZGuildAPI(GuildConfig):
         return [MASZUserNoteAPI(self.request_handler, x) for x in r.json()]
 
     def create_usernote(self, usernote: UserNote) -> MASZUserNoteAPI:
-        r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}/usernote", json_body=usernote)  # TODO: .to_dict()
+        r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}/usernote", json_body=usernote.to_dict())
         return MASZUserNoteAPI(self.request_handler, r.json())
 
     def delete_usernote(self, user_id: Union[str, int]) -> bool:

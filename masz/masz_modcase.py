@@ -25,18 +25,9 @@ class MASZModcaseAPI(Modcase):
         for k, v in fields.items():
             setattr(self, k, v)
         try:
-            data = {
-                "title": self.title,
-                "description": self.description,
-                "userid": self.user_id,
-                "labels": self.labels,
-                "punishment": self.punishment,
-                "punishmentType": self.punishment_type,
-                "punishedUntil": parse_dt_to_json(self.punished_until),
-            }
             r = self.request_handler.request("PUT", f"/modcases/{self.guild_id}/{self.case_id}",
                                                 params={'sendNotification': send_notification, 'handlePunishment': handle_punishment, 'announceDm': announce_dm},
-                                                json_body=data)
+                                                json_body=self.to_dict())
         except MASZBaseException as e:
             console.verbose(f"Failed to update modcase {e}")
             return False
@@ -44,10 +35,12 @@ class MASZModcaseAPI(Modcase):
             super().__init__(**r.json())
         return r.status_code == 200
 
-    def post_comment(self, msg: str) -> bool:
+    def post_comment(self, msg: Union[Comment, str]) -> bool:
         data = {
             "message": msg
         }
+        if isinstance(msg, Comment):
+            data = msg.to_dict()
         try:
             r = self.request_handler.request("POST", f"/modcases/{self.guild_id}/{self.case_id}/comments", json_body=data)
         except MASZBaseException as e:

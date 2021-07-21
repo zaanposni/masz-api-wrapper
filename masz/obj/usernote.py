@@ -1,4 +1,4 @@
-from masz.helpers import parse_dt_from_json
+from masz.helpers import parse_dt_from_json, parse_dt_to_json
 
 class UserNote:
     def __init__(self, **kwargs) -> None:
@@ -11,3 +11,13 @@ class UserNote:
 
     def __str__(self) -> str:
         return f"{self.user_id}: {self.description}"
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "guildId": self.guild_id,
+            "userId": self.user_a,
+            "description": self.description,
+            "creatorId": self.creator_id,
+            "updatedAt": parse_dt_to_json(self.createdAt)
+        }

@@ -14,41 +14,30 @@ class MASZMotdAPI(Motd):
         super().__init__(**r.json())        
 
     def delete(self) -> bool:
-        data = {
-            "message": self.message,
-            "showMotd": False
-        }
-        r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}/motd", json_body=data)
+        self.show_motd = False
+        r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}/motd", json_body=self.to_dict())
         if r.status_code == 200:
             super().__init__(**r.json())
         return r.status_code == 200
 
     def set(self, msg: str) -> bool:
-        data = {
-            "message": msg,
-            "showMotd": True
-        }
-        r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}/motd", json_body=data)
+        self.message = msg
+        self.show_motd = True
+        r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}/motd", json_body=self.to_dict())
         if r.status_code == 200:
             super().__init__(**r.json())
         return r.status_code == 200
 
     def activate(self) -> bool:
-        data = {
-            "message": self.message,
-            "showMotd": True
-        }
-        r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}/motd", json_body=data)
+        self.show_motd = True
+        r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}/motd", json_body=self.to_dict())
         if r.status_code == 200:
             super().__init__(**r.json())
         return r.status_code == 200
 
     def toggle(self) -> bool:
-        data = {
-            "message": self.message,
-            "showMotd": not self.show_motd
-        }
-        r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}/motd", json_body=data)
+        self.show_motd = not self.show_motd
+        r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}/motd", json_body=self.to_dict())
         if r.status_code == 200:
             super().__init__(**r.json())
         return r.status_code == 200
