@@ -14,3 +14,4 @@ from .creation_type import CreationType
 from .comment import Comment
 from .motd import Motd
 from .usernote import UserNote
+from .usermap import UserMap
