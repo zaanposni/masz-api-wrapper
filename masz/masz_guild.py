@@ -60,6 +60,17 @@ class MASZGuildAPI(GuildConfig):
         r = self.request_handler.request("GET", f"/modcases/{self.guild_id}", params={'startPage': start_page})
         return [MASZModcaseAPI(self.request_handler, x) for x in r.json()]
 
+    def get_modcases(self) -> List[MASZModcaseAPI]:
+        count = 0
+        all_cases = []
+        while True:
+            new_cases = self.get_modcases_paginated(count)
+            count += 1
+            all_cases += new_cases
+            if not len(new_cases):
+                break
+        return all_cases
+
     def create_modcase(self, modcase: Modcase, send_notification: bool = True, handle_punishment: bool = True) -> MASZModcaseAPI:
         r = self.request_handler.request(
                 "POST",
