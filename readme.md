@@ -16,6 +16,16 @@ pip install masz
 
 ## 👀Examples
 
+Checkout the example script `demo.py`.
+
+![demo.gif](demo.gif)
+
+## Support
+
+If you have any questions feel free to contact me.
+- [Mail](mailto:masz@zaanposni.com)
+- Discord: `zaanposni#9295`
+- Discord MASZ guild: https://discord.gg/5zjpzw6h3S
 
 ## 🤝 Contributors <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"/>
 
