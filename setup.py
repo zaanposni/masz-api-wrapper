@@ -6,7 +6,7 @@ with open("readme.md", "r", encoding="utf-8") as fh:
 setup(
   name='masz',
   py_modules=["masz"],
-  version='1.0.4',
+  version='1.1.0',
   license='MIT',
   description='API Wrapper for MASZ (A discord moderation bot)',
   author='zaanposni',
@@ -24,7 +24,7 @@ setup(
           'rich'
       ],
   classifiers=[
-    'Development Status :: 1 - Planning',
+    'Development Status :: 4 - Beta',
     'Intended Audience :: Developers',
     'Topic :: Software Development :: Build Tools',
     'License :: OSI Approved :: MIT License',
@@ -32,6 +32,7 @@ setup(
     'Programming Language :: Python :: 3.6',
     'Programming Language :: Python :: 3.7',
     'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
   ],
   long_description=long_description,
   long_description_content_type="text/markdown"
