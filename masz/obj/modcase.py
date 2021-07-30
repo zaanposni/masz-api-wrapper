@@ -46,8 +46,6 @@ class Modcase:
         return f"#{self.case_id} {self.title}"
 
     def to_dict(self) -> dict:
-        print(parse_enum_to_json(self.punishment_type))
-        print(parse_enum_to_json(self.creation_type))
         return {
             "id": self.id,
             "caseId": self.case_id,
