@@ -71,12 +71,12 @@ class MASZGuildAPI(GuildConfig):
                 break
         return all_cases
 
-    def create_modcase(self, modcase: Modcase, send_notification: bool = True, handle_punishment: bool = True) -> MASZModcaseAPI:
+    def create_modcase(self, modcase: Modcase, send_notification: bool = True, handle_punishment: bool = True, announce_dm: bool = True) -> MASZModcaseAPI:
         r = self.request_handler.request(
                 "POST",
                 f"/modcases/{self.guild_id}",
                 json_body=modcase.to_dict(),
-                params={"sendNotification": send_notification, "handlePunishment": handle_punishment}
+                params={"sendNotification": send_notification, "handlePunishment": handle_punishment, "announceDm": announce_dm}
             )
         return MASZModcaseAPI(self.request_handler, r.json())
 
