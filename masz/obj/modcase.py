@@ -1,7 +1,7 @@
 from typing import List
 from datetime import datetime
 
-from masz.helpers import parse_dt_from_json, parse_dt_to_json
+from masz.helpers import parse_dt_from_json, parse_dt_to_json, parse_enum_to_json
 from .punishment_type import PunishmentType
 from .creation_type import CreationType
 from .comment import Comment
@@ -46,6 +46,8 @@ class Modcase:
         return f"#{self.case_id} {self.title}"
 
     def to_dict(self) -> dict:
+        print(parse_enum_to_json(self.punishment_type))
+        print(parse_enum_to_json(self.creation_type))
         return {
             "id": self.id,
             "caseId": self.case_id,
@@ -65,8 +67,8 @@ class Modcase:
             "labels": self.labels,
             "others": self.others,
             "valid": self.valid,
-            "creationType": self.creation_type,
-            "punishmentType": self.punishment_type,
+            "creationType": parse_enum_to_json(self.creation_type),
+            "punishmentType": parse_enum_to_json(self.punishment_type),
             "punishedUntil": parse_dt_to_json(self.punished_until),
             "punishmentActive": self.punishment_active,
             "allowComments": self.allow_comments,
