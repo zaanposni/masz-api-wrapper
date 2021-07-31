@@ -16,7 +16,7 @@ class UserNote:
         return {
             "id": self.id,
             "guildId": self.guild_id,
-            "userId": self.user_a,
+            "userId": self.user_id,
             "description": self.description,
             "creatorId": self.creator_id,
             "updatedAt": parse_dt_to_json(self.createdAt)
