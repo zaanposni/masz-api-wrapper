@@ -19,5 +19,5 @@ class UserNote:
             "userId": self.user_id,
             "description": self.description,
             "creatorId": self.creator_id,
-            "updatedAt": parse_dt_to_json(self.createdAt)
+            "updatedAt": parse_dt_to_json(self.updated_at)
         }
