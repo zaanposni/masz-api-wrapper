@@ -24,7 +24,6 @@ class Modcase:
         self.occured_at = parse_dt_from_json(kwargs.get("occuredAt"))
         self.last_edited_at = parse_dt_from_json(kwargs.get("lastEditedAt"))
         self.last_edited_by_mod_id = kwargs.get("lastEditedByModId")
-        self.punishment = kwargs.get("punishment")
         self.labels = kwargs.get("labels", [])
         self.others = kwargs.get("others")
         self.valid = kwargs.get("valid", False)
@@ -61,7 +60,6 @@ class Modcase:
             "occuredAt": parse_dt_to_json(self.occured_at),
             "lastEditedAt": parse_dt_to_json(self.last_edited_at),
             "lastEditedByModId": self.last_edited_by_mod_id,
-            "punishment": self.punishment,
             "labels": self.labels,
             "others": self.others,
             "valid": self.valid,

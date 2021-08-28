@@ -31,17 +31,7 @@ class MASZGuildAPI(GuildConfig):
         for k, v in fields.items():
             setattr(self, k, v)
         try:
-            data = {
-                "modRoles": self.mod_roles,
-                "adminRoles": self.admin_roles,
-                "mutedRoles": self.muted_roles,
-                "modNotificationDM": self.dm_notification,
-                "modPublicNotificationWebhook": self.public_webhook,
-                "modInternalNotificationWebhook": self.internal_webhook,
-                "strictModPermissionCheck": self.strict_permission_check,
-                "executeWhoisOnJoin": self.execute_whois_on_join
-            }
-            r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}", json_body=data)
+            r = self.request_handler.request("PUT", f"/guilds/{self.guild_id}", json_body=self.to_dict())
         except MASZBaseException as e:
             console.verbose(f"Failed to update guild {e}")
             return False
@@ -55,7 +45,7 @@ class MASZGuildAPI(GuildConfig):
     def get_modcase(self, case_id: Union[str, int]) -> MASZModcaseAPI:
         r = self.request_handler.request("GET", f"/modcases/{self.guild_id}/{case_id}")
         return MASZModcaseAPI(self.request_handler, r.json())
-    
+
     def get_modcases_paginated(self, start_page=0) -> List[MASZModcaseAPI]:
         r = self.request_handler.request("GET", f"/modcases/{self.guild_id}", params={'startPage': start_page})
         return [MASZModcaseAPI(self.request_handler, x) for x in r.json()]
@@ -103,7 +93,7 @@ class MASZGuildAPI(GuildConfig):
     def delete_usernote(self, user_id: Union[str, int]) -> bool:
         r = self.request_handler.request("DELETE", f"/guilds/{self.guild_id}/usernote/{user_id}")
         return r.status_code == 200
-    
+
     # UserMap
     # =================================================================================================================
 
@@ -120,7 +110,7 @@ class MASZGuildAPI(GuildConfig):
         r = self.request_handler.request("POST", f"/guilds/{self.guild_id}/usermap", json_body=usermap.to_dict())
         console.log(r.json())
         return MASZUserMapAPI(self.request_handler, r.json())
-    
+
     def delete_usermap(self, map_id: Union[str, int]) -> bool:
         r = self.request_handler.request("DELETE", f"/guilds/{self.guild_id}/usernote/{map_id}")
         return r.status_code == 200
