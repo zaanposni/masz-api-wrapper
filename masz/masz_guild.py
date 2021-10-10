@@ -43,11 +43,11 @@ class MASZGuildAPI(GuildConfig):
     # =================================================================================================================
 
     def get_modcase(self, case_id: Union[str, int]) -> MASZModcaseAPI:
-        r = self.request_handler.request("GET", f"/modcases/{self.guild_id}/{case_id}")
+        r = self.request_handler.request("GET", f"/guilds/{self.guild_id}/cases/{case_id}")
         return MASZModcaseAPI(self.request_handler, r.json())
 
     def get_modcases_paginated(self, start_page=0) -> List[MASZModcaseAPI]:
-        r = self.request_handler.request("GET", f"/modcases/{self.guild_id}", params={'startPage': start_page})
+        r = self.request_handler.request("GET", f"/guilds/{self.guild_id}/cases", params={'startPage': start_page})
         return [MASZModcaseAPI(self.request_handler, x) for x in r.json()]
 
     def get_modcases(self) -> List[MASZModcaseAPI]:
@@ -64,14 +64,14 @@ class MASZGuildAPI(GuildConfig):
     def create_modcase(self, modcase: Modcase, send_notification: bool = True, handle_punishment: bool = True, announce_dm: bool = True) -> MASZModcaseAPI:
         r = self.request_handler.request(
                 "POST",
-                f"/modcases/{self.guild_id}",
+                f"/guilds/{self.guild_id}/cases",
                 json_body=modcase.to_dict(),
                 params={"sendNotification": send_notification, "handlePunishment": handle_punishment, "announceDm": announce_dm}
             )
         return MASZModcaseAPI(self.request_handler, r.json())
 
     def delete_modcase(self, case_id: Union[str, int], send_notification: bool = True, force_delete: bool = False) -> bool:
-        r = self.request_handler.request("DELETE", f"/modcases/{self.guild_id}/{case_id}",
+        r = self.request_handler.request("DELETE", f"/guilds/{self.guild_id}/cases/{case_id}",
                                             params={'sendNotification': send_notification, 'forceDelete': force_delete})
         return r.status_code == 200
 
