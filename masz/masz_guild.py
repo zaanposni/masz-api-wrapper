@@ -66,7 +66,7 @@ class MASZGuildAPI(GuildConfig):
                 "POST",
                 f"/guilds/{self.guild_id}/cases",
                 json_body=modcase.to_dict(),
-                params={"sendNotification": send_notification, "handlePunishment": handle_punishment, "announceDm": announce_dm}
+                params={"sendNotification": send_notification, "handlePunishment": handle_punishment, "sendDmNotification": announce_dm}
             )
         return MASZModcaseAPI(self.request_handler, r.json())
 
