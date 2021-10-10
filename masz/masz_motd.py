@@ -10,8 +10,9 @@ class MASZMotdAPI(Motd):
     def __init__(self, request_handler: MASZRequestHandler, guild_id: Union[str, int]) -> None:
         self.request_handler = request_handler
         self.guild_id = guild_id
-        r = self.request_handler.request("GET", f"/guilds/{self.guild_id}/motd")
-        super().__init__(**r.json())        
+        r = self.request_handler.request("GET", f"/guilds/{self.guild_id}/motd", handle_status_code=False)
+        if r.status_code == 200:
+            super().__init__(**r.json())
 
     def delete(self) -> bool:
         self.show_motd = False

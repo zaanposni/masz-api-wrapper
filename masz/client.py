@@ -3,7 +3,7 @@ from .request_adapter import MASZRequestAdapter
 from .exceptions import MASZBaseException
 
 
-SUPPORTED_API_VERSION = 2
+SUPPORTED_API_VERSION = 3
 
 class MASZClient(MASZRequestAdapter):
     def __init__(self, url: str, token: str, api_version: int = 1, log_level: MASZLogLevel = MASZLogLevel.INFO) -> None:
